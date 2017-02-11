@@ -1,27 +1,218 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
-<link rel="import" href="../bower_components/paper-editable-list/paper-editable-list.html">
+<link rel="import" href="shared-styles.html">
 
 <dom-module id="my-new-view">
   <!-- Defines the element's style and local DOM -->
   <template>
-    <style>
+    <style include="shared-styles">
       :host {
         display: block;
-
         padding: 16px;
       }
+
+      * {
+      	margin: 0;
+      	padding: 0;
+      	-webkit-box-sizing: border-box;
+      	-moz-box-sizing: border-box;
+      	box-sizing: border-box;
+      }
+
+      body {
+      	background: #FAFAFA;
+      	font-family: arial, helvetica, sans-serif;
+      	font-size: 16px;
+      }
+
+      .wrap {
+      	margin: auto;
+      	max-width: 800px;
+      	width: 90%;
+      }
+
+      .principal {
+      	background: #F44336;
+      	border-top: 20px solid #D32F2F;
+      	color: #fff;
+      	padding: 50px 0;
+      	width: 100%;
+      }
+
+      .principal .formulario {
+      	color: #212121;
+      	text-align: center;
+      }
+
+      .principal .formulario input[type=text] {
+      	margin-bottom: 20px;
+      	padding: 10px;
+      	width: 100%;
+      }
+
+      .principal .formulario input[type=text].error {
+      	border: 5px solid #D32F2F;
+      	color: red;
+      }
+
+      .principal .formulario .boton {
+      	background: none;
+      	border: 1px solid #D32F2F;
+      	color: #fff;
+      	display: inline-block;
+      	font-size: 16px;
+      	padding: 15px;
+      }
+
+      .principal .formulario .boton:hover {
+      	border: 1px solid #fff;
+      }
+
+      /* - Tareas - */
+      .tareas .lista {
+      	list-style: none;
+      }
+
+      .tareas .lista li {
+      	border-bottom: 1px solid #B6B6B6;
+      }
+
+      .tareas .lista li a {
+      	color: #212121;
+      	display: block;
+      	padding: 20px 0;
+      	text-decoration: none;
+      }
+
+      .tareas .lista li a:hover {
+      	text-decoration: line-through;
+      }
+
+      /* Prevent the text contents of draggable elements from being selectable. */
+      [draggable] {
+        -moz-user-select: none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        /* Required to make elements draggable in old WebKit */
+        -khtml-user-drag: element;
+        -webkit-user-drag: element;
+      }
+
     </style>
 
-    <h1></h1>
-      <!--<paper-slider min="-100" max="100" value="50"></paper-slider>-->
+    <h1>New view</h1>
 
-      <paper-editable-list></paper-editable-list>
+  	<div class="principal">
+  		<div class="wrap">
+  			<form class="formulario" action="">
+  				<input id="tareaInput" placeholder="Agrega tu tarea" class="" type="text">
+  				<input class="boton" id="btn-agregar" value="Agregar Tarea" type="button">
+  			</form>
+  		</div>
+  	</div>
+
+  	<div class="tareas">
+  		<div class="wrap">
+  			<ul class="lista" id="lista">
+  			</ul>
+  		</div>
+  	</div>
+  	<!--<script src="main.js"></script>-->
+
+
+
   </template>
   <!-- Creates the element's prototype and registers it -->
   <script>
     Polymer({
-      is: 'my-new-view'
+      is: 'my-new-view',
+
+      properties: {
+
+      },
+
+      created: function() {
+        console.log(this.localName + '#' + this.id + ' was created');
+      },
+
+      ready: function() {
+        	// Variables
+        	var lista = document.getElementById("lista"),
+        		tareaInput = document.getElementById("tareaInput"),
+        		btnNuevaTarea = document.getElementById("btn-agregar");
+
+        	// Funciones
+        	var agregarTarea = function(){
+        		var tarea = tareaInput.value,
+        			nuevaTarea = document.createElement("li"),
+        			enlace = document.createElement("a"),
+        			contenido = document.createTextNode(tarea);
+
+        		if (tarea === "") {
+        			tareaInput.setAttribute("placeholder", "Agrega una tarea valida");
+        			tareaInput.className = "error";
+        			return false;
+        		}
+
+        		// Agregamos el contenido al enlace
+        		enlace.appendChild(contenido);
+        		// Le establecemos un atributo href
+        		enlace.setAttribute("href", "#");
+            enlace.setAttribute("class", "style-scope my-new-view");
+        		// Agrergamos el enlace (a) a la nueva tarea (li)
+        		nuevaTarea.appendChild(enlace);
+            nuevaTarea.setAttribute("class", "style-scope my-new-view");
+            nuevaTarea.setAttribute("draggable", "true");
+        		// Agregamos la nueva tarea a la lista
+        		lista.appendChild(nuevaTarea);
+
+        		tareaInput.value = "";
+
+        		for (var i = 0; i <= lista.children.length -1; i++) {
+        			lista.children[i].addEventListener("click", function(){
+        				this.parentNode.removeChild(this);
+        			});
+        		}
+
+        	};
+        	var comprobarInput = function(){
+        		tareaInput.className = "";
+        		teareaInput.setAttribute("placeholder", "Agrega tu tarea");
+        	};
+
+        	var eleminarTarea = function(){
+        		this.parentNode.removeChild(this);
+        	};
+
+        	// Eventos
+
+        	// Agregar Tarea
+        	btnNuevaTarea.addEventListener("click", agregarTarea);
+
+        	// Comprobar Input
+        	tareaInput.addEventListener("click", comprobarInput);
+
+        	// Borrando Elementos de la lista
+        	for (var i = 0; i <= lista.children.length -1; i++) {
+        		lista.children[i].addEventListener("click", eleminarTarea);
+        	}
+
+        console.log(this.localName + '#' + this.id + ' has local DOM initialized');
+      },
+
+      //Cuando el componente esta adjuntado al html
+      attached: function() {
+        console.log(this.localName + '#' + this.id + ' was attached');
+      },
+
+      detached: function() {
+        console.log(this.localName + '#' + this.id + ' was detached');
+      },
+
+      attributeChanged: function(name, type) {
+        console.log(this.localName + '#' + this.id + ' attribute ' + name +
+          ' was changed to ' + this.getAttribute(name));
+      }
     });
   </script>
 </dom-module>
