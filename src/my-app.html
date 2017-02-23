@@ -67,7 +67,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <app-drawer-layout fullbleed>
       <!-- Drawer content -->
-      <app-drawer>
+      <!--<app-drawer>
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="view1" href="/view1">View One</a>
@@ -75,7 +75,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <a name="view3" href="/view3">View Three</a>
           <a name="new-view" href="/new-view">New View</a>
         </iron-selector>
-      </app-drawer>
+      </app-drawer>-->
 
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
@@ -92,9 +92,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             attr-for-selected="name"
             fallback-selection="view404"
             role="main">
-          <my-view1 name="view1"></my-view1>
+          <!--<my-view1 name="view1"></my-view1>
           <my-view2 name="view2"></my-view2>
-          <my-view3 name="view3"></my-view3>
+          <my-view3 name="view3"></my-view3>-->
           <my-new-view name="new-view"></my-new-view>
           <my-view404 name="view404"></my-view404>
         </iron-pages>
@@ -119,7 +119,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ],
 
       _routePageChanged: function(page) {
-        this.page = page || 'view1';
+        this.page = page || 'new-view';
 
         if (!this.$.drawer.persistent) {
           this.$.drawer.close();

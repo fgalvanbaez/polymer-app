@@ -42,8 +42,8 @@ class appBackend(ApplicationSession):
     def init(self):
 
         self._actions = {
-            'lastAction': "",
-            'currentAction': "",
+            'ant': "",
+            'current': "",
         }
 
         self._votes = {
@@ -52,35 +52,40 @@ class appBackend(ApplicationSession):
             'Lemon': 0
         }
 
-    @wamp.register(u'io.crossbar.app.get')
+    """@wamp.register(u'io.crossbar.app.get')
     def getVotes(self):
-        return [{'subject': key, 'votes': value} for key, value in self._votes.items()]
+        return [{'subject': key, 'votes': value} for key, value in self._votes.items()]"""
 
-    @wamp.register(u'io.crossbar.app.getn')
-    def getVotesn(self):
+    """MY APP"""
+    @wamp.register(u'io.crossbar.app.get')
+    def getList(self):
         return [{'subject': key, 'action': value} for key, value in self._actions.items()]
 
 
 
-    @wamp.register(u'io.crossbar.app.voten')
-    def submitVoten(self, subject):
-        self._actions[subject] = 1
-        result = {'subject': subject, 'votes': self._votes[subject]}
-        self.publish('io.crossbar.app.onvoten', result)
-        return result
-
-    @wamp.register(u'io.crossbar.app.vote')
+    """@wamp.register(u'io.crossbar.app.vote')
     def submitVote(self, subject):
         self._votes[subject] += 1
         result = {'subject': subject, 'votes': self._votes[subject]}
         self.publish('io.crossbar.app.onvote', result)
+        return result"""
+
+
+    """MY APP"""
+    @wamp.register(u"io.crossbar.app.updatelista")
+    def submitList(self, object):
+        pass
+        self._actions['ant'] = self._actions['current']
+        self._actions['current'] = object
+        result = {'subject': 'current', 'action': self._actions['current']}
+        self.publish('io.crossbar.app.onupdateList', result)
         return result
 
 
-    @wamp.register(u'io.crossbar.app.reset')
+    """@wamp.register(u'io.crossbar.app.reset')
     def resetVotes(self):
         self.init()
-        self.publish('io.crossbar.app.onreset')
+        self.publish('io.crossbar.app.onreset')"""
 
 
     @inlineCallbacks
